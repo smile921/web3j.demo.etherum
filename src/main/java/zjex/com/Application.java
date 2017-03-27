@@ -14,7 +14,7 @@ import springfox.petstore.controller.PetController;
  */
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = {SwaggerConfig.class,PetController.class})
+@ComponentScan(basePackageClasses = {SwaggerConfig.class,PetController.class},basePackages = "springfox")
 public class Application {
 
     public static void main(String[] args) {

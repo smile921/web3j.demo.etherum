@@ -1,5 +1,6 @@
 package zjex.com.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,9 @@ import java.util.concurrent.ExecutionException;
  * Created by frere921 on 2017/3/23.
  */
 
+
+@Api(value = "/demo", description = "demo Info Manage API",
+        produces = "application/json", tags = { "cif", "user" })
 @Controller
 @RequestMapping("/")
 public class DemoController {
