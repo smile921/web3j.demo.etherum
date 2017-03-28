@@ -12,12 +12,14 @@ import org.web3j.protocol.Web3j;
 import org.web3j.tx.ChainId;
 import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.TransactionManager;
+import zjex.com.AccountConfig;
 import zjex.com.smart.contracts.TalkCoin;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
 
 /**
  * Created by frere921 on 2017/3/24.
@@ -44,6 +46,9 @@ public class TalkCoinController {
     @Autowired
     private Web3j web3j;
 
+    @Autowired
+    private AccountConfig config;
+
     @RequestMapping(value = "/set",method = RequestMethod.GET)
     @ResponseBody
     public Map setX(@RequestParam String xToset){
@@ -53,9 +58,8 @@ public class TalkCoinController {
         Uint256 x = new Uint256(bg);
         BigInteger gasPrice = new BigInteger("1000");
         BigInteger gasLimit =  new BigInteger("10000");
-        String privKey ="33b148fae362b96481956d3fde53f20d270157c52a5e931b7b21ce0ac939f22b";
-        String pubKey = "93ea85da309e964bd3c268409053148ea578d4e9dee90b61aa374eb591ea75f375dd032fa078815144973bcf70d5ad2168ba83d0255b7283a54a5362ae0d6314";
-        Credentials credentials =   Credentials.create(privKey,pubKey);
+
+        Credentials credentials =   Credentials.create(config.getPrivateKey(),config.getPublicKey());
         TransactionManager tm = new RawTransactionManager(web3j,credentials, ChainId.MAIN_NET);
         String contractAddress = "0xc179d6411f6ef6ed6ea9cd7085b2de2e69b9cf4b";
         TalkCoin  talk = TalkCoin.load(contractAddress,web3j,tm,gasPrice, gasLimit);
@@ -97,4 +101,6 @@ public class TalkCoinController {
 
         return map;
     }
+
+
 }

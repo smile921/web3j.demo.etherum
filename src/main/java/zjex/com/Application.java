@@ -3,6 +3,7 @@ package zjex.com;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import springfox.petstore.controller.PetController;
  * Created by frere921 on 2017/3/23.
  */
 
+@EnableConfigurationProperties(AccountConfig.class)
 @SpringBootApplication
 @ComponentScan(basePackageClasses = {SwaggerConfig.class,PetController.class},basePackages = "springfox")
 public class Application {

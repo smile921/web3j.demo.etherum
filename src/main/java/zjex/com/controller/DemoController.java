@@ -4,10 +4,7 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.methods.response.EthBlock;
@@ -79,9 +76,9 @@ public class DemoController {
         return  clientVersion;
     }
 
-    @RequestMapping(value = "block/sync",method = RequestMethod.GET )
+    @RequestMapping(value = "block/sync/{number}",method = RequestMethod.GET )
     @ResponseBody
-    public EthBlock.Block demoWeb3jCallSync(@RequestParam String number){
+    public EthBlock.Block demoWeb3jCallSync(@PathVariable String number){
 
         EthBlock block = null;
         try {
