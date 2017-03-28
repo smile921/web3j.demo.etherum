@@ -29,17 +29,11 @@ import java.util.concurrent.ExecutionException;
  Deploying TalkCoin...
  TalkCoin: 0xc179d6411f6ef6ed6ea9cd7085b2de2e69b9cf4b
 
- UTC--2017-03-14T03-19-26.956607486Z--a50f4f3d0b5f9808c418d51b1017b7451220a737
- {"address":"a50f4f3d0b5f9808c418d51b1017b7451220a737",
-  "crypto":{"cipher":"aes-128-ctr",
-            "ciphertext":"31db33a750328e91736e5cb2756a0f5f09516f24c5f582b8ce60eb46b0f2e0ca",
-             "cipherparams":{"iv":"bdd195c3e6afd5817a3ef985d9ec6f35"},
-             "kdf":"scrypt",
-             "kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,
-              "salt":"6f4e3a2e7a1211fb1867acb0ba26fac3a47c28087125f508f72c6df8380f18da"},
-                "mac":"b599b3bf14af38417eae3cb7bb703097090a240944cf72b00edc564497e84f87"},
-             "id":"d212f383-5914-4b6e-8bc5-47120849e19c",
-                "version":3}
+ UTC--2017-03-14T03-19-26.956607486Z--a50f4f3d0b5f9808c418d51b1017b7451220a737.json
+   privKey ="33b148fae362b96481956d3fde53f20d270157c52a5e931b7b21ce0ac939f22b";
+   pubKey = "93ea85da309e964bd3c268409053148ea578d4e9dee90b61aa374eb591ea75f375dd032fa078815144973bcf70d5ad2168ba83d0255b7283a54a5362ae0d6314";
+
+
 
  */
 
@@ -59,8 +53,8 @@ public class TalkCoinController {
         Uint256 x = new Uint256(bg);
         BigInteger gasPrice = new BigInteger("1000");
         BigInteger gasLimit =  new BigInteger("10000");
-        String privKey ="";
-        String pubKey = "";
+        String privKey ="33b148fae362b96481956d3fde53f20d270157c52a5e931b7b21ce0ac939f22b";
+        String pubKey = "93ea85da309e964bd3c268409053148ea578d4e9dee90b61aa374eb591ea75f375dd032fa078815144973bcf70d5ad2168ba83d0255b7283a54a5362ae0d6314";
         Credentials credentials =   Credentials.create(privKey,pubKey);
         TransactionManager tm = new RawTransactionManager(web3j,credentials, ChainId.MAIN_NET);
         String contractAddress = "0xc179d6411f6ef6ed6ea9cd7085b2de2e69b9cf4b";

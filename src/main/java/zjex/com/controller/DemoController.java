@@ -25,8 +25,8 @@ import java.util.concurrent.ExecutionException;
  */
 
 
-@Api(value = "/demo", description = "demo Info Manage API",
-        produces = "application/json", tags = { "cif", "user" })
+@Api(value = "/demo", description = "demo  Info API",
+        produces = "application/json", tags = { "demo" })
 @Controller
 @RequestMapping("/")
 public class DemoController {
