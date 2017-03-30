@@ -10,3 +10,7 @@ this is just a demo project playing with web3j and ethereum
 ## 自动编译 智能合约 生成 abi 文件和 bin 文件 ，然后生成 java 类
 > 在shell 中运行 下面的命令即可
 > gradle runGenerateSol2Java
+
+## TODO 
+
+* 合约又相互依赖的时候可能编译不过去 
