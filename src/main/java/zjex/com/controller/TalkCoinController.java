@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.ChainId;
 import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.TransactionManager;
@@ -19,6 +20,9 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -59,16 +63,33 @@ public class TalkCoinController {
         BigInteger gasPrice = new BigInteger("1000");
         BigInteger gasLimit =  new BigInteger("10000");
 
-        Credentials credentials =   Credentials.create(config.getPrivateKey(),config.getPublicKey());
+        Credentials credentials =   Credentials.create(config.getPrivateKey().trim(),config.getPublicKey().trim());
         TransactionManager tm = new RawTransactionManager(web3j,credentials, ChainId.MAIN_NET);
         String contractAddress = "0xc179d6411f6ef6ed6ea9cd7085b2de2e69b9cf4b";
         TalkCoin  talk = TalkCoin.load(contractAddress,web3j,tm,gasPrice, gasLimit);
-        talk.setX(x);
+        Future<TransactionReceipt> future = talk.setX(x);
         Map map = new HashMap<>();
+
+        if(future.isDone()){
+            try {
+                TransactionReceipt tr =  future.get(Long.parseLong("100"), TimeUnit.SECONDS);
+              BigInteger  number = tr.getBlockNumber();
+              map.put("Block Number ",number);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
+        }
+
         map.put("contractAddress",contractAddress);
         map.put("Uint256 x",x);map.put("gasPrice",gasPrice);
-        map.put("TransactionManager",tm);map.put("gasLimit",gasLimit);
-        map.put("web3j",web3j.toString());map.put("TalkCoin",talk);
+//        map.put("TransactionManager",tm);
+        map.put("gasLimit",gasLimit);
+        map.put("web3j",web3j.toString());
+        map.put("TalkCoin",talk);
 
         return map;
     }
@@ -80,7 +101,9 @@ public class TalkCoinController {
         Uint256 x = new Uint256(bg);
         BigInteger gasPrice = new BigInteger("1000");
         BigInteger gasLimit =  new BigInteger("10000");
-        TransactionManager tm = null;
+        Credentials credentials =   Credentials.create(config.getPrivateKey().trim(),config.getPublicKey().trim());
+        TransactionManager tm = new RawTransactionManager(web3j,credentials, ChainId.MAIN_NET);
+
         String contractAddress = "0xc179d6411f6ef6ed6ea9cd7085b2de2e69b9cf4b";
         TalkCoin  talk = TalkCoin.load(contractAddress,web3j,tm,gasPrice, gasLimit);
         try {
@@ -92,12 +115,12 @@ public class TalkCoinController {
         }
         Map map = new HashMap<>();
         map.put("contractAddress",contractAddress);
-        map.put("Uint256 x",x);
-        map.put("gasPrice",gasPrice);
-        map.put("TransactionManager",tm);
-        map.put("gasLimit",gasLimit);
-        map.put("web3j",web3j.toString());
-        map.put("TalkCoin",talk);
+        map.put("Uint256 x",x.getValue());
+//        map.put("gasPrice",gasPrice);
+//        map.put("TransactionManager",tm);
+//        map.put("gasLimit",gasLimit);
+//        map.put("web3j",web3j.toString());
+//        map.put("TalkCoin",talk);
 
         return map;
     }

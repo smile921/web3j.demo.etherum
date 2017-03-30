@@ -12,3 +12,4 @@ logs/
 *.iml
 .gradle/ 
 .gradle/
+*.abi

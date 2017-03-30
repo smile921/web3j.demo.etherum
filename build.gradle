@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.JavaExec
+
 group 'zjex.web3j'
 version '1.0-SNAPSHOT'
 
@@ -6,6 +8,14 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply from: "$rootDir/dependencies.gradle"
 sourceCompatibility = 1.8
+
+task runGenerateSol2Java (type: JavaExec) {
+    main = "com.zjex.generator.GeneratorUtil"
+    classpath = sourceSets.main.runtimeClasspath
+    args ' --dir src/main/resources/contracts/solidity --packageName zjex.com.smart.contracts'
+//    jvmArgs = applicationDefaultJvmArgs + '-Dethereumj.conf.res=generator.conf'
+}
+
 repositories {
     maven {
         url  "file:///D:/maven/repo"
@@ -14,6 +24,7 @@ repositories {
     jcenter()
     mavenCentral()
     maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+    maven { url "https://dl.bintray.com/ethereum/maven/" }
 }
 
 
@@ -31,6 +42,7 @@ dependencies {
     compile libs.springfoxSwaggerUi
     compile libs.springfoxDataRest
     compile libs.jackson
+    compile group: 'org.ethereum', name: 'ethereumj-core', version: '1.4.3-RELEASE'
 
     testCompile libs.test
 
