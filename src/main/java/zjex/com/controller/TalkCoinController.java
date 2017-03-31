@@ -46,6 +46,7 @@ import java.util.concurrent.*;
 @RequestMapping("/smart/contract")
 public class TalkCoinController {
 
+    public static final byte ZJEX_MAIN_NET = 0;
     @Autowired
     private Web3j web3j;
 
@@ -63,7 +64,7 @@ public class TalkCoinController {
         BigInteger gasLimit =  new BigInteger(gasLimits,16);
 
         Credentials credentials =   Credentials.create(config.getPrivateKey().trim(),config.getPublicKey().trim());
-        TransactionManager tm = new RawTransactionManager(web3j,credentials, ChainId.MAIN_NET);
+        TransactionManager tm = new RawTransactionManager(web3j,credentials, ZJEX_MAIN_NET);
         String contractAddress = "0xfdb8156bd5d8ac9529fbfc05809870861e6644fc";
         TalkCoin  talk = TalkCoin.load(contractAddress,web3j,tm,gasPrice, gasLimit);
         Future<TransactionReceipt> future = talk.setX(x);
@@ -101,12 +102,13 @@ public class TalkCoinController {
         BigInteger gasPrice = new BigInteger(gasPrices);
         BigInteger gasLimit =  new BigInteger(gasLimits,16);
         Credentials credentials =   Credentials.create(config.getPrivateKey().trim(),config.getPublicKey().trim());
-        TransactionManager tm = new RawTransactionManager(web3j,credentials, ChainId.MAIN_NET);
+        TransactionManager tm = new RawTransactionManager(web3j,credentials, ZJEX_MAIN_NET);
 
         String contractAddress = "0xfdb8156bd5d8ac9529fbfc05809870861e6644fc";
         TalkCoin  talk = TalkCoin.load(contractAddress,web3j,tm,gasPrice, gasLimit);
         try {
-            x = talk.getX().get();
+            Future<Uint256> future = talk.getX();
+            x = future.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -132,7 +134,7 @@ public class TalkCoinController {
         BigInteger gasLimit =  new BigInteger(gasLimits,16);
         BigInteger initialValue =  new BigInteger(initValue);
         Credentials credentials =   Credentials.create(config.getPrivateKey().trim(),config.getPublicKey().trim());
-        TransactionManager tm = new RawTransactionManager(web3j,credentials, ChainId.MAIN_NET);
+        TransactionManager tm = new RawTransactionManager(web3j,credentials, ZJEX_MAIN_NET);
 
         String contractAddress = "0xfdb8156bd5d8ac9529fbfc05809870861e6644fc";
         TalkCoin  talk = TalkCoin.deploy(web3j,credentials,gasPrice,gasLimit,initialValue).get();
@@ -145,6 +147,29 @@ public class TalkCoinController {
 //        map.put("gasLimit",gasLimit);
 //        map.put("web3j",web3j.toString());
 //        map.put("TalkCoin",talk);
+
+        return map;
+    }
+
+
+    @RequestMapping(value = "/sendTranscation",method = RequestMethod.GET)
+    @ResponseBody
+    public Map transcationSendTalk(@RequestParam  String initValue,
+                                   @RequestParam  String gasPrices,
+                                   @RequestParam  String gasLimits) throws ExecutionException, InterruptedException {
+        BigInteger bg = new BigInteger("0");
+        Uint256 x = new Uint256(bg);
+        BigInteger gasPrice = new BigInteger(gasPrices);
+        BigInteger gasLimit =  new BigInteger(gasLimits,16);
+        Credentials credentials =   Credentials.create(config.getPrivateKey().trim(),config.getPublicKey().trim());
+        TransactionManager tm = new RawTransactionManager(web3j,credentials, ZJEX_MAIN_NET);
+
+        String contractAddress = "0xfdb8156bd5d8ac9529fbfc05809870861e6644fc";
+        TalkCoin  talk = TalkCoin.load(contractAddress,web3j,tm,gasPrice, gasLimit);
+
+        Map map = new HashMap<>();
+        map.put("contractAddress",talk.getContractAddress());
+        map.put("Uint256 x",x.getValue());
 
         return map;
     }
